@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.NumberFormat;
-
 /**
  * This app displays an order form to order coffee.
  */
@@ -49,20 +47,32 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
-        int price = quantity * 5;
-        String priceMessage = "Total: $" + price;
-        priceMessage = priceMessage + "\nThank you!";
-        displayMessage(priceMessage);
+
+        createOrderSummary(calculatePrice(quantity,5));
 
     }
 
     /**
      * Calculates the price of the order.
      *
-     * @param quantity is the number of cups of coffee ordered
+     * @param quantity    is the number of cups of coffee ordered
+     * @param pricePerCup cost of each cup of coffee
      */
-    private void calculatePrice(int quantity) {
-        int price = quantity * 5;
+    private int calculatePrice(int quantity, int pricePerCup) {
+        return quantity * pricePerCup;
+    }
+
+
+    /**
+     * this method create an order summery
+     *
+     * @param price is the cost of each cup of coffee
+     */
+    private String createOrderSummary(int price) {
+        String summary = "name: Kaptain kunal " + "\nquantity: " + quantity + "\nTotal: " + price;
+        summary += "\nThank You!";
+        displayMessage(summary);
+        return summary;
     }
 
     /**
@@ -76,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * This method displays the given price on the screen.
+     *
      * @param message
      */
     private void displayMessage(String message) {
