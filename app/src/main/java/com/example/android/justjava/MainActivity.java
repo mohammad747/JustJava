@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -52,7 +53,13 @@ public class MainActivity extends AppCompatActivity {
         CheckBox WhippedCreamCheckbox = findViewById(R.id.whipped_cream_checkbox);
         boolean hasWhippedCream = WhippedCreamCheckbox.isChecked();
 
-        createOrderSummary(calculatePrice(quantity, 5), hasWhippedCream);
+        CheckBox ChocolateCheckbox = findViewById(R.id.chocolate_checkbox);
+        boolean hasChocolate = ChocolateCheckbox.isChecked();
+
+        EditText NameEditText = findViewById(R.id.name_edittext);
+        String name = NameEditText.getText().toString();
+
+        createOrderSummary(calculatePrice(quantity, 5), hasWhippedCream,hasChocolate,name);
 
     }
 
@@ -72,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param price is the cost of each cup of coffee
      */
-    private String createOrderSummary(int price, boolean addWippedCream) {
-        String summary = "name: Kaptain kunal " + "\nAdd whipped cream? " + addWippedCream + "\nquantity: " + quantity + "\nTotal: " + price;
+    private String createOrderSummary(int price, boolean addWippedCream,boolean addChocolate,String nameOfClient) {
+        String summary = "name: " + nameOfClient + "\nAdd whipped cream? " + addWippedCream + "\nAdd Chocolate? " + addChocolate + "\nquantity: " + quantity + "\nTotal: " + price;
         summary += "\nThank You!";
         displayMessage(summary);
         return summary;
