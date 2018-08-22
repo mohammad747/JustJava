@@ -12,6 +12,8 @@ package com.example.android.justjava;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -48,7 +50,17 @@ public class MainActivity extends AppCompatActivity {
      */
     public void submitOrder(View view) {
 
-        createOrderSummary(calculatePrice(quantity,5));
+        CheckBox WhippedCreamCheckbox = findViewById(R.id.whipped_cream_checkbox);
+        boolean hasWhippedCream = WhippedCreamCheckbox.isChecked();
+
+        CheckBox ChocolateCheckbox = findViewById(R.id.chocolate_checkbox);
+        boolean hasChocolate = ChocolateCheckbox.isChecked();
+
+        EditText NameEditText = findViewById(R.id.name_edittext);
+        String name = NameEditText.getText().toString();
+
+
+        createOrderSummary(calculatePrice(quantity, 5, hasWhippedCream, hasChocolate), hasWhippedCream, hasChocolate, name);
 
     }
 
@@ -58,7 +70,14 @@ public class MainActivity extends AppCompatActivity {
      * @param quantity    is the number of cups of coffee ordered
      * @param pricePerCup cost of each cup of coffee
      */
-    private int calculatePrice(int quantity, int pricePerCup) {
+    private int calculatePrice(int quantity, int pricePerCup, boolean addWhippedCream, boolean addChocolate) {
+
+        if (addWhippedCream) {
+            pricePerCup += 1;
+        }
+        if (addChocolate) {
+            pricePerCup += 2;
+        }
         return quantity * pricePerCup;
     }
 
@@ -68,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param price is the cost of each cup of coffee
      */
-    private String createOrderSummary(int price) {
-        String summary = "name: Kaptain kunal " + "\nquantity: " + quantity + "\nTotal: " + price;
+    private String createOrderSummary(int price, boolean addWippedCream, boolean addChocolate, String nameOfClient) {
+        String summary = "name: " + nameOfClient + "\nAdd whipped cream? " + addWippedCream + "\nAdd Chocolate? " + addChocolate + "\nquantity: " + quantity + "\nTotal: " + price;
         summary += "\nThank You!";
         displayMessage(summary);
         return summary;
