@@ -9,12 +9,16 @@
 package com.example.android.justjava;
 
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * This app displays an order form to order coffee.
@@ -33,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
      * increment
      */
     public void increment(View view) {
+        if (quantity == 100) {
+            Toast.makeText(this, "You can't have more than 100 coffees", Toast.LENGTH_SHORT).show();
+            return;
+        }
         quantity = quantity + 1;
         displayQuantity(quantity);
     }
@@ -41,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
      * decrement
      */
     public void decrement(View view) {
+        if (quantity == 1) {
+            Toast.makeText(this, "You can't have less than 1 coffee", Toast.LENGTH_SHORT).show();
+            return;
+        }
         quantity = quantity - 1;
         displayQuantity(quantity);
     }
@@ -60,20 +72,30 @@ public class MainActivity extends AppCompatActivity {
         String name = NameEditText.getText().toString();
 
 
-        createOrderSummary(calculatePrice(quantity, 5, hasWhippedCream, hasChocolate), hasWhippedCream, hasChocolate, name);
+        Intent email = new Intent(Intent.ACTION_SENDTO);
+        email.setData(Uri.parse("mailto:")); // only email apps should handle this
+        email.putExtra(Intent.EXTRA_SUBJECT, "JustJava order for " + name);
+        email.putExtra(Intent.EXTRA_TEXT, createOrderSummary(calculatePrice(quantity, 5, hasWhippedCream, hasChocolate), hasWhippedCream, hasChocolate, name));
+        if (email.resolveActivity(getPackageManager()) != null) {
+            startActivity(email);
+        }
 
     }
 
     /**
      * Calculates the price of the order.
      *
-     * @param quantity    is the number of cups of coffee ordered
-     * @param pricePerCup cost of each cup of coffee
+     * @param quantity        is the number of cups of coffee ordered
+     * @param pricePerCup     cost of each cup of coffee
+     * @param addWhippedCream is whether or not the user wants whipped cream toppings
+     * @param addChocolate    is whether or not the user wants chocolate toppings
+     * @return total price
      */
     private int calculatePrice(int quantity, int pricePerCup, boolean addWhippedCream, boolean addChocolate) {
-
+        //add 1$ if the user wants whipped cream
         if (addWhippedCream) {
             pricePerCup += 1;
+            //add 2$ if the user wants chocolate
         }
         if (addChocolate) {
             pricePerCup += 2;
@@ -87,10 +109,15 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param price is the cost of each cup of coffee
      */
+    @SuppressLint({"StringFormatMatches", "StringFormatInvalid"})
     private String createOrderSummary(int price, boolean addWippedCream, boolean addChocolate, String nameOfClient) {
-        String summary = "name: " + nameOfClient + "\nAdd whipped cream? " + addWippedCream + "\nAdd Chocolate? " + addChocolate + "\nquantity: " + quantity + "\nTotal: " + price;
-        summary += "\nThank You!";
-        displayMessage(summary);
+        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String summary = getString(R.string.order_summary_name, nameOfClient);
+        summary += getString(R.string.order_summary_whipped_cream, addWippedCream);
+        summary += getString(R.string.order_summary_chocolate, addChocolate);
+        summary += getString(R.string.order_summary_quantity, quantity);
+        summary += getString(R.string.order_summary_price, price);
+        summary += getString(R.string.thank_you);
+        //displayMessage(summary);
         return summary;
     }
 
@@ -103,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * This method displays the given price on the screen.
-     *
-     * @param message
-     */
-    private void displayMessage(String message) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        priceTextView.setText((message));
-    }
+//    /**
+//     * This method displays the given price on the screen.
+//     *
+//     * @param message
+//     */
+//    private void displayMessage(String message) {
+//        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
+//        priceTextView.setText((message));
+//    }
 
 }
