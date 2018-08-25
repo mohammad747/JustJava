@@ -11,7 +11,7 @@
     <string name="order_summary_whipped_cream">\nخامه اضافه شود؟ <xliff:g example="true" id="addWhippedCream">%b</xliff:g></string>
     <string name="order_summary_chocolate">\nشکلات اضافه شود؟ <xliff:g example="true" id="addChocolate">%b</xliff:g></string>
     <string name="order_summary_quantity">\nتعداد: <xliff:g example="2" id="quantity">%d</xliff:g></string>
-    <string name="order_summary_price">\nجمع: $<xliff:g example="$10" id="price">%d</xliff:g></string>
+    <string name="order_summary_price">\nجمع: <xliff:g id="price" example="$10">%s</xliff:g></string>
     <string name="thank_you">\nبا تشکر!</string>
 
 
